@@ -43,14 +43,14 @@ public class AdminsController {
     }
 
     @PatchMapping("/update/{id}")
-    public String update(@ModelAttribute("edit_user") User updatedUser, @RequestParam(required=false, name = "rol") Long[] roles, @PathVariable("id") Long id) {
+    public String update(@ModelAttribute("edit_user") User updatedUser, @PathVariable("id") Long id) {
         updatedUser.setAuthority(roleRepository.getById(id));
         userServiceImpl.saveUser(updatedUser);
 //        userServiceImpl.update(id, updatedUser);
         return "redirect:/admin";
     }
 
-    @DeleteMapping("/delete//{id}")
+    @DeleteMapping("/delete/{id}")
     public String delete(@PathVariable("id") Long id) {
         userServiceImpl.deleteUser(id);
         return "redirect:/admin";

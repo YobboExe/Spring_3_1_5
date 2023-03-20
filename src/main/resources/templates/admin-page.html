@@ -151,9 +151,7 @@
 
                                                                 <div class="modal-footer">
                                                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                                    <form th:method="PATCH">
-                                                                        <button onclick="myFunction()" name="button" class="btn btn-primary" type="submit" >Edit</button>
-                                                                    </form>
+                                                                    <button onclick="myFunction()" name="button" class="btn btn-primary" type="submit" >Edit</button>
                                                                 </div>
                                                             </form>
                                                         </div>
@@ -211,7 +209,6 @@
                                     </div>
                                     <div class="w-50 mx-auto" sec:authorize="hasRole('ADMIN')">
                                         <form th:action="@{/admin/create}" method="GET">
-
                                             <button  type="submit"  class="btn btn-success">Add new user</button>
                                         </form>
                                     </div>
