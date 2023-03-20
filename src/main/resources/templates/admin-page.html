@@ -112,7 +112,7 @@
                                                         <div class="modal-body">
                                                             <!-- поля юзера для смены -->
 
-                                                            <form th:method="PATCH" th:object="${edit_user}">
+                                                            <form th:method="PUT" onsubmit="return setAction(this)" th:object="${edit_user}">
                                                                 <div class="form-group">
                                                                     <label for="userid1">ID</label>
                                                                     <input type="number" class="form-control" id="userid1" th:value="${user.getId()}" th:field="*{id}"  disabled th:placeholder="${user.id}">
@@ -151,7 +151,9 @@
 
                                                                 <div class="modal-footer">
                                                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                                    <button onclick="myFunction()" name="button" class="btn btn-primary" type="submit" >Edit</button>
+                                                                    <form th:method="PUT" onclick="myFunction()">
+                                                                        <button name="button" class="btn btn-primary" type="submit" >Edit</button>
+                                                                    </form>
                                                                 </div>
                                                             </form>
                                                         </div>
@@ -163,8 +165,8 @@
 
                                         </td>
                                         <td>
-                                            <form th:method="DELETE">
-                                                <button name="button" class="btn btn-danger" th:action="@{/admin/delete/{id}(id=${user.getId()})}" type="submit">Delete</button>
+                                            <form th:method="DELETE" th:action="@{/admin/delete/{id}(id=${user.getId()})}">
+                                                <button name="button" class="btn btn-danger" type="submit">Delete</button>
                                             </form>
                                         </td>
                                     </tr>
@@ -260,9 +262,15 @@
 
 <!-- Конец вкладок -->
 <script th:inline="javascript">
-    function myFunction() {
+    function UrlWithID() {
         var selectedValue = document.getElementById("roleSelection1").value;
         window.location.href = /*[[@{/admin/update/}]]*/ + selectedValue;
+    }
+
+    function setAction(form) {
+        const selectedValue = document.getElementById("roleSelection1").value;
+        form.action = /*[[@{/admin/update/}]]*/ + selectedValue;
+        alert(form.action)
     }
 </script>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

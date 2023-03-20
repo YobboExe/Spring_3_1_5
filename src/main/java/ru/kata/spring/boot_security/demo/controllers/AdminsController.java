@@ -42,7 +42,7 @@ public class AdminsController {
         return "redirect:/admin";
     }
 
-    @PatchMapping("/update/{id}")
+    @PutMapping("/update/{id}")
     public String update(@ModelAttribute("edit_user") User updatedUser, @PathVariable("id") Long id) {
         updatedUser.setAuthority(roleRepository.getById(id));
         userServiceImpl.saveUser(updatedUser);
