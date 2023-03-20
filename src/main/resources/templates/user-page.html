@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Userpage</title>
+</head>
+<body>
+<p th:text="${'Hi, ' + user.getUsername() + '!'}">VALUE</p>
+<p th:text="${user.getId() + ': ID'}">VALUE</p>
+
+<a sec:authorize="hasRole('ADMIN')" th:href="@{/admin/update/{id}(id=${user.getId()})}">Edit</a>
+<div sec:authorize="hasRole('ADMIN')">
+    <form th:method="DELETE" th:action="@{/admin/delete/{id}(id=${user.getId()})}">
+        <input type="submit" value="Delete"/>
+    </form>
+</div>
+<form th:method="POST" th:action="@{/logout}">
+    <input type="submit" value="Sign Out"/>
+</form>
+</body>
+</html>
