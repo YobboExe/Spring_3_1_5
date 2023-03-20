@@ -58,11 +58,12 @@ public class UserServiceImpl implements UserService {
         userRepository.deleteById(id);
     }
 
+    @Transactional
     public void update(Long id, User updatedUser) {
-        Optional<User> toChange = userRepository.findById(id);
+        Optional<User> originalUser = userRepository.findById(id);
 
-        if (toChange.isPresent()) {
-            User user = toChange.get();
+        if (originalUser.isPresent()) {
+            User user = originalUser.get();
             user.setId(updatedUser.getId());
             user.setUsername(updatedUser.getUsername());
             user.setPassword(updatedUser.getPassword());

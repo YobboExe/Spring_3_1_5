@@ -42,11 +42,18 @@ public class AdminsController {
         return "redirect:/admin";
     }
 
-    @PutMapping("/update/{id}")
-    public String update(@ModelAttribute("edit_user") User updatedUser, @PathVariable("id") Long id) {
-        updatedUser.setAuthority(roleRepository.getById(id));
-        userServiceImpl.saveUser(updatedUser);
-//        userServiceImpl.update(id, updatedUser);
+//    @PutMapping("/update/{id}")
+//    public String update(@ModelAttribute("edit_user") User updatedUser, @PathVariable("id") Long id) {
+//        updatedUser.setAuthority(roleRepository.getById(id));
+//        userServiceImpl.saveUser(updatedUser);
+//        return "redirect:/admin";
+//    }
+
+    @PatchMapping("/update")
+    public String update(@ModelAttribute("edit_user") User updatedUser, @RequestParam("rol") Long[] roles) {
+        updatedUser.setAuthority(roleRepository.getById(roles[0]));
+        System.out.println(updatedUser.getId());
+        userServiceImpl.update(1L, updatedUser);
         return "redirect:/admin";
     }
 
