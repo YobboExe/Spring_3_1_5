@@ -1,22 +1,104 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:scope="http://www.w3.org/1999/xhtml">
+<html xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Userpage</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>Control Users</title>
+
 </head>
 <body>
-<p th:text="${'Hi, ' + user.getUsername() + '!'}">VALUE</p>
-<p th:text="${user.getId() + ': ID'}">VALUE</p>
 
-<a sec:authorize="hasRole('ADMIN')" th:href="@{/admin/update/{id}(id=${user.getId()})}">Edit</a>
-<div sec:authorize="hasRole('ADMIN')">
-    <form th:method="DELETE" th:action="@{/admin/delete/{id}(id=${user.getId()})}">
-        <input type="submit" value="Delete"/>
-    </form>
+<style type="text/css">
+    body { background: whitesmoke !important; } /* Adding !important forces the browser to overwrite the default style applied by Bootstrap */
+</style>
+
+
+<!-- Верхнаяя строка с именем и логаутом -->
+<header>
+    <div >
+        <nav class="navbar navbar-light bg-dark">
+            <a class="navbar-brand">
+                <div class="container">
+                    <div class="row">
+                        <div th:object="${authUser}" class="col-sm text-light bg-dark">
+                            <span th:text="${authUser.getEmail()}">user</span>
+                            <span>with roles:</span>
+                            <span th:text="${authUser.getRole().get().getName()}">role</span>
+                        </div>
+
+                    </div>
+                </div></a>
+            <div class="col-sm-20">
+                <div>
+                    <a class="text-muted" th:href="@{/logout}">Logout</a>
+                </div>
+            </div>
+        </nav>
+    </div>
+</header>
+
+<!-- Начало вкладок -->
+
+<div class="row mt-3">
+    <div class="col-2">
+        <div class="list-group" id="list-tab" role="tablist">
+            <a class="list-group-item list-group-item-action" id="list-profile-list" data-toggle="list" href="#list-profile" role="tab" aria-controls="profile" aria-selected="true">User</a>
+
+
+        </div>
+    </div>
+    <div class="col-8 ">
+        <div class="tab-content" id="nav-tabContent">
+
+            <div class="tab-pane fade show active" id="list-profile" role="tabpanel" aria-labelledby="list-profile-list">
+
+                <p><h1>User information-page</h1></p>
+
+                <!-- Вкладка со страничкой пользователя -->
+                <p><h4>About User</h4></p>
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">First Name</th>
+                        <th scope="col">Last Name</th>
+                        <th scope="col">Age</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Role</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <div th:object="${authUser}">
+                        <tr>
+                            <th scope="row"><span th:text="${authUser.getId()}">id</span></th>
+                            <td><span th:text="${authUser.getFirst_name()}">first_name</span></td>
+                            <td><span th:text="${authUser.getLast_name()}">last_name</span></td>
+                            <td><span th:text="${authUser.getAge()}">age</span></td>
+                            <td><span th:text="${authUser.getEmail()}">email</span></td>
+                            <td><span th:text="${authUser.getRole().get().getName()}">role</span></td>
+                        </tr>
+                    </div>
+
+
+                    </tbody>
+                    </tr>
+                </table>
+            </div>
+
+        </div>
+    </div>
 </div>
-<form th:method="POST" th:action="@{/logout}">
-    <input type="submit" value="Sign Out"/>
-</form>
+
+<!-- Конец вкладок -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 </body>
 </html>
