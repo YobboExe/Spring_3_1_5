@@ -73,7 +73,7 @@
                     <div class="tab-content" id="myTabContent">
 
                         <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                            <div class="container border">
+                            <div class="container-fluid border">
                                 <p><h4>All Users</h4></p>
                             </div>
 
@@ -99,7 +99,7 @@
                                         <td><span th:text="${user.getLast_name()}">last_name</span></td>
                                         <td><span th:text="${user.getAge()}">age</span></td>
                                         <td><span th:text="${user.getEmail()}">email</span></td>
-                                        <td><span th:text="${user.getRole().get().getName()}">role</span></td>
+                                        <td><span th:text="${user.allRolesReturn()}">role</span></td>
                                         <td>
 
                                             <!-- Модальное окно с редактированием -->

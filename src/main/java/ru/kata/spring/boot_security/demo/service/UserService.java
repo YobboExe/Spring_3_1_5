@@ -34,4 +34,6 @@ public interface UserService extends UserDetailsService {
     public void update(Long id, User updatedUser);
 
     public List<User> allUsers();
+
+    public User findUser(Long id);
 }

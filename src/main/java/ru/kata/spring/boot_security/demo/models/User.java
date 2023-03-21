@@ -27,7 +27,7 @@ public class User implements UserDetails {
 
     private String email;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = {CascadeType.REFRESH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH} )
     @JoinTable(
             name = "users_role",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -35,9 +35,10 @@ public class User implements UserDetails {
     )
     private Set<Role> roles = new HashSet<>();
 
-    public User(String username, String password) {
+    public User(String username, String password, Set<Role> roles) {
         this.username = username;
         this.password = password;
+        this.roles = roles;
     }
 
     public User() {
@@ -133,11 +134,23 @@ public class User implements UserDetails {
         return roles;
     }
 
+    public void setAuthority(Set<Role> roles) {
+        this.roles = roles;
+    }
     public Optional<Role> getRole() {
         return roles.stream().findFirst();
     }
 
     public void setAuthority(Role role) {
         this.roles.add(role);
+    }
+
+    public String allRolesReturn() {
+        Set<Role> roles = this.roles;
+        StringBuilder strRole = new StringBuilder();
+        for (Role r : roles) {
+            strRole.append(r.getName()).append(" ");
+        }
+        return strRole.toString();
     }
 }
