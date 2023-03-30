@@ -22,24 +22,24 @@
 <!-- Верхнаяя строка с именем и логаутом -->
 <header>
     <div >
-    <nav class="navbar navbar-light bg-dark">
-        <a class="navbar-brand">
-            <div class="container">
-            <div class="row">
-                <div th:object="${authUser}" class="col-sm text-light bg-dark">
-                    <span th:text="${authUser.getEmail()}">user</span>
-                    <span>with roles:</span>
-                    <span th:text="${authUser.getRole().get().getName()}">role</span>
-                </div>
+        <nav class="navbar navbar-light bg-dark">
+            <a class="navbar-brand">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm text-light bg-dark">
+                            <span id="headerUser1" >email</span>
+                            <span>with roles:</span>
+                            <span id="headerUser2" >role</span>
+                        </div>
 
+                    </div>
+                </div></a>
+            <div class="col-sm-20">
+                <div>
+                    <a class="text-muted" th:href="@{/logout}">Logout</a>
+                </div>
             </div>
-        </div></a>
-        <div class="col-sm-20">
-            <div>
-                <a class="text-muted" th:href="@{/logout}">Logout</a>
-            </div>
-        </div>
-    </nav>
+        </nav>
     </div>
 </header>
 
@@ -71,7 +71,7 @@
                     </ul>
                     <div class="tab-content" id="myTabContent">
 
-                        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                        <div id="usersTable" class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
                             <div class="container-fluid border">
                                 <p><h4>All Users</h4></p>
                             </div>
@@ -90,15 +90,15 @@
                                     <th scope="col">Delete</th>
                                 </tr>
                                 </thead>
-                                <tbody>
-                                <div id="userID" th:each="user : ${users}">
+                                <tbody id="userList">
+                                <div>
                                     <tr>
-                                        <th scope="row"><span th:text="${user.getId()}">user id</span></th>
-                                        <td><span th:text="${user.getFirst_name()}">name</span></td>
-                                        <td><span th:text="${user.getLast_name()}">last_name</span></td>
-                                        <td><span th:text="${user.getAge()}">age</span></td>
-                                        <td><span th:text="${user.getEmail()}">email</span></td>
-                                        <td><span th:text="${user.allRolesReturn()}">role</span></td>
+                                        <th id="cycleUserId" scope="row"></th>
+                                        <td id="cycleUserFirstName" ></td>
+                                        <td id="cycleUserLastName" ></td>
+                                        <td id="cycleUserAge" ></td>
+                                        <td id="cycleUserEmail" ></td>
+                                        <td  id="cycleUserRoles" ></td>
                                         <td>
 
                                             <!-- Модальное окно с редактированием -->
@@ -108,7 +108,7 @@
                                                 Edit
                                             </button>
                                             <!-- Modal -->
-                                            <div class="modal fade" th:id="${'Modal' + user.id}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal fade" id="modalEdit" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                 <div class="modal-dialog">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
@@ -174,11 +174,11 @@
                                         </td>
                                         <td>
                                             <!-- DELETE MODAL -->
-                                            <button type="button" class="btn btn-danger" data-toggle="modal" th:data-target="${'#ModalDelete' + user.id}" data-whatever="@userID">
+                                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="${'#ModalDelete' + user.id}" data-whatever="@userID">
                                                 Delete
                                             </button>
                                             <!-- Delete Modal -->
-                                            <div class="modal fade" th:id="${'ModalDelete' + user.id}" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true">
+                                            <div class="modal fade" id="${'ModalDelete' + user.id}" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true">
                                                 <div class="modal-dialog">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
@@ -312,7 +312,7 @@
                         <th scope="col">Role</th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody >
                     <div th:object="${authUser}">
                         <tr>
                             <th scope="row"><span th:text="${authUser.getId()}">id</span></th>
@@ -335,6 +335,7 @@
 </div>
 
 <!-- Конец вкладок -->
+<script src="main.js"></script>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>

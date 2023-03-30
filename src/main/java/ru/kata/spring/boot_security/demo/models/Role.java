@@ -1,5 +1,6 @@
 package ru.kata.spring.boot_security.demo.models;
 
+import com.fasterxml.jackson.annotation.JsonSetter;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
@@ -31,6 +32,7 @@ public class Role implements GrantedAuthority {
         return name;
     }
 
+    @JsonSetter
     public void setName(String role) {
         this.name = role;
     }
