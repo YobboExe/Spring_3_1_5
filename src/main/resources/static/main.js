@@ -61,18 +61,19 @@ function createEditButton(userId) {
     divEdit.appendChild(editButton);
     setAttributes(editButton, {"type":"button", "class": "btn btn-info", "data-toggle":"modal", "data-whatever":"@userID", "data-target":`edit${userId.toString()}`});
 
-    // document.getElementById("modalForUser").id = `edit${userId.toString()}`
+    document.getElementById("modalForUser").id = `edit${userId.toString()}`
 
-    document.getElementById("userList").addEventListener('click', function (e) {
-        if (e.target.type == "button") {
-            $("#edit" + e.target).modal();
-        }
-    }, false);
+    // document.getElementById("userList").addEventListener('click', function (e) {
+    //     if (e.target.type == "button") {
+    //         $("#edit" + e.target).modal();
+    //     }
+    // }, false);
     // modalE.setAttribute("id", `edit${userId.toString()}`);
     // editButton.onclick()
     return divEdit;
 }
 
+//на потом
 function createModalEdit(jsonElement) {
     let modalId = `Modal ${jsonElement.id}`
     document.getElementById("editModal").setAttribute("data-target", "modalForUser");
