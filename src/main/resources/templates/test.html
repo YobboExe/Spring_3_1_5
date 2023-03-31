@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>Control Users</title>
+
+</head>
+<body>
+<header>
+    <div >
+        <nav class="navbar navbar-light bg-dark">
+            <a class="navbar-brand">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm text-light bg-dark">
+                            <span id="headerUser1" >email</span>
+                            <span>with roles:</span>
+                            <span id="headerUser2" >role</span>
+                        </div>
+
+                    </div>
+                </div></a>
+            <div class="col-sm-20">
+                <div>
+                    <a class="text-muted" th:href="@{/logout}">Logout</a>
+                </div>
+            </div>
+        </nav>
+    </div>
+</header>
+<table class="table table-striped bg-white border">
+
+    <thead >
+    <tr>
+        <th scope="col">ID</th>
+        <th scope="col">First Name</th>
+        <th scope="col">Last Name</th>
+        <th scope="col">Age</th>
+        <th scope="col">Email</th>
+        <th scope="col">Role</th>
+        <th scope="col">Edit</th>
+        <th scope="col">Delete</th>
+    </thead>
+
+    <tbody id="userList">
+    <tr>
+    <script>
+        main();
+    </script>
+
+        <!-- Модальное окно с редактированием -->
+
+    <!-- Modal -->
+        <div class="modal fade" id="modalForUser" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Edit user</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- поля юзера для смены -->
+
+                        <form th:method="PATCH" th:action="@{/admin/update}">
+                            <div class="form-group">
+                                <label for="id">ID</label>
+                                <input type="number" class="form-control" id="id" name="id" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="first_name">First name</label>
+                                <input type="text" class="form-control" name="first_name" id="first_name">
+                            </div>
+                            <div class="form-group">
+                                <label for="last_name">Last name</label>
+                                <input type="text" class="form-control" name="last_name" id="last_name">
+                            </div>
+                            <div class="form-group">
+                                <label for="age">Age</label>
+                                <input type="number" class="form-control" name="age" id="age">
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="text" class="form-control" name="email" id="email">
+                            </div>
+                            <div class="form-group">
+                                <label for="username">Username</label>
+                                <input type="text" class="form-control" name="username" id="username">
+                            </div>
+                            <div class="form-group">
+                                <label for="password">Password</label>
+                                <input type="text" class="form-control" name="password" id="password">
+                            </div>
+                            <div class="form-group">
+                                <label for="roleSelection1">Role</label>
+                                <select name="rol" multiple class="form-control" id="roleSelection1">
+                                    <option  text="${role.name}" id="rol" name="rol" value="${role.id}">1</option>
+                                </select>
+                            </div>
+                            <!-- передать в URL выбранный ID -->
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <form th:method="PATCH">
+                                    <button onclick="confirmEdit()" name="button" class="btn btn-primary" type="submit" >Edit</button>
+                                </form>
+                            </div>
+                        </form>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </tr>
+    </tbody>
+
+</table>
+<nav class="navbar navbar-light bg-dark">
+<h1 id="userFirstName"></h1>
+</nav>
+<h1>Test</h1>
+<script src="/static/main.js"></script>
+    <!-- Конец вкладок -->
+    <script src="Test.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+</body>
+</html>
