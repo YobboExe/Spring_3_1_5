@@ -67,10 +67,10 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <div class="modal-body">
+                    <div id="modalProp" class="modal-body">
                         <!-- поля юзера для смены -->
 
-                        <form th:method="PATCH" th:action="@{/admin/update}">
+                        <form id="userEditForm" method="POST" action="/admin/update">
                             <div class="form-group">
                                 <label for="id">ID</label>
                                 <input type="number" class="form-control" id="id" name="id" readonly>
@@ -109,9 +109,7 @@
 
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <form th:method="PATCH">
-                                    <button onclick="confirmEdit()" name="button" class="btn btn-primary" type="submit" >Edit</button>
-                                </form>
+                                <button name="button" class="btn btn-primary" type="submit" >Edit</button>
                             </div>
                         </form>
                     </div>

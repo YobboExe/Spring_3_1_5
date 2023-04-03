@@ -4,6 +4,7 @@ let xttp = new XMLHttpRequest();
 xttp.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
         main(this.responseText)
+        console.log("ajaxed")
     }
 }
 
@@ -17,24 +18,31 @@ const urlAuth = "http://localhost:8080/people/current"
 
 
 function main(){
+    currentUser();
+    fetch(urlUsers).then(res => res.json())
+        .then(data => {
+            let json = data;
+            let keys = Object.keys(json);
+            console.log(keys);
+            for (let k in keys) {
+                console.log(json[k]);
+                createTr(json[k]);
+                let editButton = document.getElementsByClassName("btn-info")[k];
+                modalEditFill(editButton);
+            }
+
+        });
+
+}
+
+function currentUser() {
     fetch(urlAuth).then(res => res.json())
         .then(data => {
             let json = data;
             document.getElementById('headerUser1').innerHTML = json.email;
             document.getElementById('headerUser2').innerHTML = json.role["name"];
         });
-    fetch(urlUsers).then(res => res.json())
-        .then(data => {
-            let json = data;
-            let keys  = Object.keys(json);
-            console.log(keys);
-            for(let k in keys) {
-                console.log(json[k]);
-
-                createTr(json[k]);
-            }
-            })
-};
+}
 
 function createTr(jsonElement) {
     let createRow = document.createElement("tr");
@@ -59,53 +67,99 @@ function createEditButton(userId) {
     const editButton = document.createElement("button");
     editButton.innerHTML = "Edit";
     divEdit.appendChild(editButton);
-    setAttributes(editButton, {"type":"button", "class": "btn btn-info", "data-toggle":"modal", "data-whatever":"@userID", "data-target":`edit${userId.toString()}`});
+    setAttributes(editButton, {"type":"button", "class": "btn btn-info", "data-toggle":"modal", "data-whatever":"@userID", "data-target":`#modalForUser`});
 
-    document.getElementById("modalForUser").id = `edit${userId.toString()}`
-
-    // document.getElementById("userList").addEventListener('click', function (e) {
-    //     if (e.target.type == "button") {
-    //         $("#edit" + e.target).modal();
-    //     }
-    // }, false);
-    // modalE.setAttribute("id", `edit${userId.toString()}`);
-    // editButton.onclick()
     return divEdit;
 }
 
-//на потом
-function createModalEdit(jsonElement) {
-    let modalId = `Modal ${jsonElement.id}`
-    document.getElementById("editModal").setAttribute("data-target", "modalForUser");
-    document.getElementById("modalForUser");
-    $("modalForUser").modal("show")
+function modalEditFill(editButton) {
+
+    let userId = editButton.parentNode.parentNode.children[0].innerText;
+
+    editButton.addEventListener("click", function() {
+        fetch(urlUsers).then(res => res.json())
+            .then(data => {
+                let keys = Object.keys(data);
+                for( let k in keys) {
+                    if (data[k].id == userId) {
+                        console.log("прогрузка модального окна")
+                        fillUserEdit(data[k], editButton);
+                    } else {
+                        console.log("id не равно указаному")
+                    }
+                }
+            })
+    })
+
+
 }
 
 
 
-function fillUserEdit(jsonElement) {
-    let idEl = document.getElementById("id");
-    setAttributes(idEl, {"value": `${jsonElement.id}`, "placeholder": `${jsonElement.id}`})
-    let firstNameEl = document.getElementById("first_name");
-    setAttributes(firstNameEl, {"value": `${jsonElement.first_name}`, "placeholder": `${jsonElement.first_name}`});
-    let lastNameEl = document.getElementById("last_name");
-    setAttributes(lastNameEl, {"value": `${jsonElement.last_name}`, "placeholder": `${jsonElement.last_name}`});
-    let ageEl = document.getElementById("age");
-    setAttributes(ageEl, {"value": `${jsonElement.age}`, "placeholder": `${jsonElement.age}`});
-    let emailEl = document.getElementById("email");
-    setAttributes(emailEl, {"value": `${jsonElement.email}`, "placeholder": `${jsonElement.email}`});
-    let usernameEl = document.getElementById("username");
-    setAttributes(usernameEl, {"value": `${jsonElement.username}`, "placeholder": `${jsonElement.username}`});
-    let passwordEl = document.getElementById("password");
-    setAttributes(passwordEl, {"value": `${jsonElement.password}`, "placeholder": `${jsonElement.password}`});
-    selectRole();
+function fillUserEdit(json, editButton) {
+
+                let jsonElement = json;
+
+                let idEl = document.getElementById("id");
+
+                setAttributes(idEl, {
+                    "value": `${jsonElement.id}`,
+                    "placeholder": `${jsonElement.id}`})
+                let firstNameEl = document.getElementById("first_name");
+                setAttributes(firstNameEl, {
+                    "value": `${jsonElement.first_name}`,
+                    "placeholder": `${jsonElement.first_name}`
+                });
+                let lastNameEl = document.getElementById("last_name");
+                setAttributes(lastNameEl, {
+                    "value": `${jsonElement.last_name}`,
+                    "placeholder": `${jsonElement.last_name}`
+                });
+                let ageEl = document.getElementById("age");
+                setAttributes(ageEl, {
+                    "value": `${jsonElement.age}`,
+                    "placeholder": `${jsonElement.age}`});
+                let emailEl = document.getElementById("email");
+                setAttributes(emailEl, {
+                    "value": `${jsonElement.email}`,
+                    "placeholder": `${jsonElement.email}`});
+                let usernameEl = document.getElementById("username");
+                setAttributes(usernameEl, {
+                    "value": `${jsonElement.username}`,
+                    "placeholder": `${jsonElement.username}`
+                });
+                let passwordEl = document.getElementById("password");
+                setAttributes(passwordEl, {
+                    "value": `${jsonElement.password}`,
+                    "placeholder": `${jsonElement.password}`
+                });
+                let rolesEl = document.getElementById("roleSelection1");
+                let roles;
+                fetch(urlUsers).then(res => res.json())
+                    .then(data => {
+                        let keys = Object.keys(data);
+                        for (let k in keys) {
+                            roles += data[k].role;
+                            console.log(`${roles}`)
+                        }
+                    })
+    setAttributes(rolesEl, {})
 }
 
+function confirmCreate() {
 
+}
 
 function confirmEdit() {
-    let selectedValue = document.getElementById("roleSelection1").value;
-    window.location.href = /*[[@{/admin/update/}]]*/ + selectedValue;
+
+
+
+}
+
+const editForm = document.getElementById("userEditForm");
+editForm.addEventListener('submit', handleFormSubmit);
+function confirmDelete() {
+
 }
 
 function setAttributes(el, attrs) {

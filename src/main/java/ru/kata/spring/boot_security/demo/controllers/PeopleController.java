@@ -38,6 +38,14 @@ public class PeopleController {
         return userServiceImpl.findByUsername(currentUser);
     }
 
+    public void update() {
+
+    }
+
+    public void delete() {
+
+    }
+
     @GetMapping("/list/{id}")
     @ResponseBody
     public User getPerson(@PathVariable("id") Long id) {
