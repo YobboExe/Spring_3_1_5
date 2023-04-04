@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:form="http://www.w3.org/1999/xhtml">
 <html xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <html lang="en">
 <head>
@@ -70,7 +71,7 @@
                     <div id="modalProp" class="modal-body">
                         <!-- поля юзера для смены -->
 
-                        <form id="userEditForm" th:method="PATCH" action="/people/update">
+                        <form modelAttribute="edit_user" id="userEditForm" th:method="PATCH" action="/people/update">
                             <div class="form-group">
                                 <label for="id">ID</label>
                                 <input type="number" class="form-control" id="id" name="id" readonly>

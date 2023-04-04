@@ -2,17 +2,20 @@ package ru.kata.spring.boot_security.demo.controllers;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.service.UserServiceImpl;
 
+import java.awt.*;
 import java.security.Principal;
 import java.util.List;
+import java.util.Map;
 
 @Controller
-@RequestMapping("/people")
+@RequestMapping(value = "/people", produces = MediaType.APPLICATION_JSON_VALUE)
 public class PeopleController {
 
     @Autowired
@@ -43,11 +46,13 @@ public class PeopleController {
     }
 
     @PatchMapping("/update")
-    public String update(@ModelAttribute("edit_user") User updatedUser, @RequestParam("rol") String[] roles) {
-        User user = userServiceImpl.findUser(updatedUser.getId());
-        user.setAuthority(userServiceImpl.getRoleById(Long.valueOf(roles[0])));
-        updatedUser.setAuthority(user.getAuthority());
-        userServiceImpl.update(user.getId(), updatedUser);
+    public String update(@RequestParam Map<String, String> body) {
+        System.out.println("Выполнение update!!!!!fapfaf");
+        System.out.println(body);
+//        User user = userServiceImpl.findUser(body);
+//        user.setAuthority(userServiceImpl.getRoleById(Long.valueOf(roles)));
+//        updatedUser.setAuthority(user.getAuthority());
+//        userServiceImpl.update(user.getId(), updatedUser);
         return "test";
     }
 
@@ -56,7 +61,7 @@ public class PeopleController {
     }
 
     @PostMapping("/create")
-    public void addUser(@ModelAttribute("new_user") User user, @RequestParam("rol") Long[] roles) {
+    public void addUser(@RequestBody User user, @RequestParam("rol") Long[] roles) {
         user.setAuthority(userServiceImpl.getRoleById(roles[0]));
         userServiceImpl.saveUser(user);
     }
