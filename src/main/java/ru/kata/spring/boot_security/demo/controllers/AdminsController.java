@@ -34,8 +34,8 @@ public class AdminsController {
     }
 
     @PostMapping("/create")
-    public String addUser(@ModelAttribute("new_user") User user, @RequestParam("rol") Long[] roles) {
-        user.setAuthority(userServiceImpl.getRoleById(roles[0]));
+    public String addUser(@ModelAttribute("new_user") User user, @RequestParam("rol") String roles) {
+        user.setAuthority(userServiceImpl.getRoleById(Long.valueOf(roles)));
         userServiceImpl.saveUser(user);
         return "redirect:/admin";
     }

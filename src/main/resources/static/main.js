@@ -13,7 +13,8 @@ xttp.send();
 
 
 const urlUsers = "http://localhost:8080/people/list";
-const urlAuth = "http://localhost:8080/people/current"
+const urlAuth = "http://localhost:8080/people/current";
+const urlRoles ="http://localhost:8080/people/roles";
 
 
 
@@ -31,6 +32,33 @@ function main(){
                 modalEditFill(editButton);
             }
 
+        });
+    roleSelection();
+
+}
+
+function roleSelection() {
+    let selectEl1 = document.getElementById("roleSelection1");
+    let selectEl = document.getElementById("roleSelection");
+    // let selectEl2 = document.getElementById("roleSelection2");
+
+    let roles;
+    fetch(urlRoles).then(res => res.json())
+        .then(data => {
+            roles = data;
+            let keys = Object.keys(roles);
+            console.log(`${keys} fetch url rol`);
+            for (let k in keys) {
+                let optEl1 = document.createElement("option");
+                optEl1.innerText = roles[k].name;
+                setAttributes(optEl1, {"value": `${roles[k]}`, "name": "rol", "type": "number"});
+                selectEl1.appendChild(optEl1);
+
+                let optEl = document.createElement("option");
+                optEl.innerText = roles[k].name;
+                setAttributes(optEl, {"value": `${roles[k]}`, "name": "rol", "type": "number"});
+                selectEl.appendChild(optEl);
+            }
         });
 
 }
@@ -98,52 +126,42 @@ function modalEditFill(editButton) {
 
 function fillUserEdit(json, editButton) {
 
-                let jsonElement = json;
+    let jsonElement = json;
 
-                let idEl = document.getElementById("id");
+    let idEl = document.getElementById("id");
 
-                setAttributes(idEl, {
-                    "value": `${jsonElement.id}`,
-                    "placeholder": `${jsonElement.id}`})
-                let firstNameEl = document.getElementById("first_name");
-                setAttributes(firstNameEl, {
-                    "value": `${jsonElement.first_name}`,
-                    "placeholder": `${jsonElement.first_name}`
-                });
-                let lastNameEl = document.getElementById("last_name");
-                setAttributes(lastNameEl, {
-                    "value": `${jsonElement.last_name}`,
-                    "placeholder": `${jsonElement.last_name}`
-                });
-                let ageEl = document.getElementById("age");
-                setAttributes(ageEl, {
-                    "value": `${jsonElement.age}`,
-                    "placeholder": `${jsonElement.age}`});
-                let emailEl = document.getElementById("email");
-                setAttributes(emailEl, {
-                    "value": `${jsonElement.email}`,
-                    "placeholder": `${jsonElement.email}`});
-                let usernameEl = document.getElementById("username");
-                setAttributes(usernameEl, {
-                    "value": `${jsonElement.username}`,
-                    "placeholder": `${jsonElement.username}`
-                });
-                let passwordEl = document.getElementById("password");
-                setAttributes(passwordEl, {
-                    "value": `${jsonElement.password}`,
-                    "placeholder": `${jsonElement.password}`
-                });
-                let rolesEl = document.getElementById("roleSelection1");
-                let roles;
-                fetch(urlUsers).then(res => res.json())
-                    .then(data => {
-                        let keys = Object.keys(data);
-                        for (let k in keys) {
-                            roles += data[k].role;
-                            console.log(`${roles}`)
-                        }
-                    })
-    setAttributes(rolesEl, {})
+    setAttributes(idEl, {
+        "value": `${jsonElement.id}`,
+        "placeholder": `${jsonElement.id}`})
+    let firstNameEl = document.getElementById("first_name");
+    setAttributes(firstNameEl, {
+        "value": `${jsonElement.first_name}`,
+        "placeholder": `${jsonElement.first_name}`
+    });
+    let lastNameEl = document.getElementById("last_name");
+    setAttributes(lastNameEl, {
+        "value": `${jsonElement.last_name}`,
+        "placeholder": `${jsonElement.last_name}`
+    });
+    let ageEl = document.getElementById("age");
+    setAttributes(ageEl, {
+        "value": `${jsonElement.age}`,
+        "placeholder": `${jsonElement.age}`});
+    let emailEl = document.getElementById("email");
+    setAttributes(emailEl, {
+        "value": `${jsonElement.email}`,
+        "placeholder": `${jsonElement.email}`});
+    let usernameEl = document.getElementById("username");
+    setAttributes(usernameEl, {
+        "value": `${jsonElement.username}`,
+        "placeholder": `${jsonElement.username}`
+    });
+    let passwordEl = document.getElementById("password");
+    setAttributes(passwordEl, {
+        "value": `${jsonElement.password}`,
+        "placeholder": `${jsonElement.password}`
+    });
+
 }
 
 function confirmCreate() {
@@ -156,10 +174,29 @@ function confirmEdit() {
 
 }
 
-const editForm = document.getElementById("userEditForm");
+const editForm = document.getElementById("userAddForm");
 editForm.addEventListener('submit', handleFormSubmit);
 function confirmDelete() {
 
+}
+
+function serializeForm(formNode) {
+
+    return new FormData(formNode);
+}
+
+async function sendData(data) {
+    return await fetch('/people/update/', {
+        method: 'POST',
+        headers: {'Content-Type': 'multipart/form-data'},
+        body: data,
+    })
+}
+
+async function handleFormSubmit(event) {
+    event.preventDefault()
+    const data =serializeForm(event.target);
+    const response = await sendData(data);
 }
 
 function setAttributes(el, attrs) {
