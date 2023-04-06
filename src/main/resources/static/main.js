@@ -211,7 +211,7 @@ function submitForm(event) {
         if (xhr.readyState === 4 && xhr.status === 200) {
             alert(xhr.responseText);
         } else {
-            alert(`trouble :( ${xhr.responseText}`)
+            console.log(`trouble :( ${xhr.responseText}`)
         }
     }
     xhr.open("PATCH", "http://localhost:8080/people/update", true, "admin", "admin")
@@ -227,7 +227,7 @@ function submitForm(event) {
     xhr.onerror = () => {
         reject(xhr.response);
     }
-    let role = event.target.children(9).id
+    let role = event.target
     console.log(role);
     xhr.send(JSON.stringify(event.target))
     })
