@@ -4,11 +4,11 @@ let xttp = new XMLHttpRequest();
 xttp.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
         main(this.responseText)
-        console.log("ajaxed")
+        console.log("list for table loaded")
     }
 }
 
-xttp.open("GET", "http://localhost:8080/people/list", true)
+xttp.open("GET", "http://localhost:8080/people/list", true, "admin", "admin")
 xttp.send();
 
 
@@ -24,9 +24,7 @@ function main(){
         .then(data => {
             let json = data;
             let keys = Object.keys(json);
-            console.log(keys);
             for (let k in keys) {
-                console.log(json[k]);
                 createTr(json[k]);
                 let editButton = document.getElementsByClassName("btn-info")[k];
                 modalEditFill(editButton);
@@ -47,16 +45,15 @@ function roleSelection() {
         .then(data => {
             roles = data;
             let keys = Object.keys(roles);
-            console.log(`${keys} fetch url rol`);
             for (let k in keys) {
                 let optEl1 = document.createElement("option");
                 optEl1.innerText = roles[k].name;
-                setAttributes(optEl1, {"value": `${roles[k]}`, "name": "rol", "type": "number"});
+                setAttributes(optEl1, {"value": `${roles[k].id}`, "name": "rol", "type": "number"});
                 selectEl1.appendChild(optEl1);
 
                 let optEl = document.createElement("option");
                 optEl.innerText = roles[k].name;
-                setAttributes(optEl, {"value": `${roles[k]}`, "name": "rol", "type": "number"});
+                setAttributes(optEl, {"value": `${roles[k].id}`, "name": "rol", "type": "number"});
                 selectEl.appendChild(optEl);
             }
         });
@@ -76,11 +73,17 @@ function createTr(jsonElement) {
     let createRow = document.createElement("tr");
     let newRow = document.getElementById("userList").appendChild(createRow);
     let newCell = newRow.insertCell();
-    // let newSpan = newCell.appendChild(document.createElement("span"))
     let newText = newCell.innerText;
+    let keys = Object.keys(jsonElement.authority);
+    let allRoles = "";
+    for (let k in keys) {
+        allRoles += jsonElement.authority[k]["name"] + " ";
+    }
+
 
     let propArray = [jsonElement.id, jsonElement.first_name, jsonElement.last_name, jsonElement.age,
-        jsonElement.email, jsonElement.role["name"]]
+        jsonElement.email, allRoles]
+
 
     for (let i = 0; i < 7; i++) {
         newRow.insertCell(i).innerHTML = propArray[i];
@@ -174,8 +177,8 @@ function confirmEdit() {
 
 }
 
-const editForm = document.getElementById("userAddForm");
-editForm.addEventListener('submit', handleFormSubmit);
+const addForm = document.getElementById("userEditForm");
+addForm.addEventListener('submit', handleFormSubmit);
 function confirmDelete() {
 
 }
@@ -186,17 +189,69 @@ function serializeForm(formNode) {
 }
 
 async function sendData(data) {
+    console.log("sendData" + data)
     return await fetch('/people/update/', {
-        method: 'POST',
-        headers: {'Content-Type': 'multipart/form-data'},
+        method: 'PATCH',
+        headers: {'Content-Type': 'application/json'},
         body: data,
+    }).catch((error) => {
+        console.log(`error ${error}`);
     })
 }
 
+function onSuccess() {
+    alert("Commited");
+}
+
+function submitForm(event) {
+    return new Promise((resolve, reject) => {
+
+    const xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            alert(xhr.responseText);
+        } else {
+            alert(`trouble :( ${xhr.responseText}`)
+        }
+    }
+    xhr.open("PATCH", "http://localhost:8080/people/update", true, "admin", "admin")
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+        xhr.onload = () => {
+        if (xhr.status >= 400) {
+            reject(xhr.response);
+        } else {
+            resolve(xhr.response);
+        }
+    }
+    xhr.onerror = () => {
+        reject(xhr.response);
+    }
+    let role = event.target.children(9).id
+    console.log(role);
+    xhr.send(JSON.stringify(event.target))
+    })
+}
 async function handleFormSubmit(event) {
     event.preventDefault()
-    const data =serializeForm(event.target);
-    const response = await sendData(data);
+    console.log(event)
+
+    submitForm(event)
+        .then(data => console.log(data))
+        .catch(err => console.log(err));
+    // const data = serializeForm(event.target);
+    // const { status, error } = await sendData(data);
+    //
+    // if (status === 200) {
+    //     onSuccess();
+    // }
+    // else {
+    //     onError(error);
+    // }
+}
+
+function onError(error) {
+    alert(error.message);
 }
 
 function setAttributes(el, attrs) {
