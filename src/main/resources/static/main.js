@@ -15,6 +15,7 @@ xttp.send();
 const urlUsers = "http://localhost:8080/people/list";
 const urlAuth = "http://localhost:8080/people/current";
 const urlRoles ="http://localhost:8080/people/roles";
+let rolesFromUrl;
 
 
 
@@ -46,6 +47,8 @@ function roleSelection() {
             roles = data;
             let keys = Object.keys(roles);
             for (let k in keys) {
+                rolesFromUrl = roles[k];
+                console.log(rolesFromUrl);
                 let optEl1 = document.createElement("option");
                 optEl1.innerText = roles[k].name;
                 setAttributes(optEl1, {"value": `${roles[k].id}`, "name": "rol", "type": "number"});
@@ -215,7 +218,7 @@ function submitForm(event) {
         }
     }
     xhr.open("PATCH", "http://localhost:8080/people/update", true, "admin", "admin")
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.setRequestHeader('Content-Type', 'application/json');
 
         xhr.onload = () => {
         if (xhr.status >= 400) {
@@ -227,9 +230,32 @@ function submitForm(event) {
     xhr.onerror = () => {
         reject(xhr.response);
     }
-    let role = event.target
-    console.log(role);
-    xhr.send(JSON.stringify(event.target))
+    let object = {};
+
+    let data = serializeForm(event.target);
+        data.forEach((value, key) => {
+
+            if (key === "roles") {
+                    fetch(urlRoles).then(res => res.json())
+                    .then(data => {
+
+                        let roles = data;
+                        let keys = Object.keys(roles);
+                        for (let k in keys) {
+                            if (roles[k].id == value) {
+                                object[key] = roles[k];
+                            }
+                        }
+                    });
+            } else {
+                object[key] = value;
+            }
+        })
+        console.log(object)
+        let jsondata = JSON.stringify(object);
+        console.log(jsondata)
+
+        xhr.send(jsondata)
     })
 }
 async function handleFormSubmit(event) {

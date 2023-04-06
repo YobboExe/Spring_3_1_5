@@ -1,6 +1,10 @@
 package ru.kata.spring.boot_security.demo.controllers;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.tomcat.util.json.JSONParser;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -47,13 +51,21 @@ public class PeopleController {
 
     @PatchMapping(value = "/update")
     @ResponseBody
-    public void update(User updatedUser, @RequestParam("rol") String role) {
-        System.out.println("Выполнение update!!!!!fapfaf");
-        System.out.println(role);
-        User user = userServiceImpl.findUser(updatedUser.getId());
-        user.setAuthority(userServiceImpl.getRoleById(Long.valueOf(role)));
-        updatedUser.setAuthority(user.getAuthority());
-        userServiceImpl.update(user.getId(), updatedUser);
+    public void update(@RequestBody User updatedUser) {
+        System.out.println("Выполнение update!!!!!fapfaKFJJSGKGLN!!!!!!!!!");
+        System.out.println(updatedUser.getEmail()); // пишет admin@mail.com
+        System.out.println(updatedUser.getAuthority()); //тут пусто - []
+
+
+//        System.out.println(updatedUser.getFirst_name());
+//        System.out.println(updatedUser.getRole().get().getName());
+//        for (Role r : updatedUser.getAuthority()) {
+//            System.out.println(r.getName());
+//        }
+//        User user = userServiceImpl.findUser(updatedUser.getId());
+//        user.setAuthority(userServiceImpl.getRoleById(Long.valueOf(updatedUser.getRole().get().getId())));
+//        updatedUser.setAuthority(user.getAuthority());
+//        userServiceImpl.update(user.getId(), updatedUser);
 //        return "test1";
     }
 
