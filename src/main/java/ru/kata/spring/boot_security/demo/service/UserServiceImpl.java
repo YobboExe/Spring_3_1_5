@@ -16,7 +16,6 @@ import ru.kata.spring.boot_security.demo.repository.UserRepository;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -91,7 +90,7 @@ public class UserServiceImpl implements UserService {
             User user = originalUser.get();
             user.setId(updatedUser.getId());
             user.setUsername(updatedUser.getUsername());
-            user.setPassword(updatedUser.getPassword());
+            user.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
             user.setAge(updatedUser.getAge());
             user.setFirst_name(updatedUser.getFirst_name());
             user.setLast_name(updatedUser.getLast_name());

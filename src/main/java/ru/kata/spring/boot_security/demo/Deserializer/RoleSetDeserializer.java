@@ -15,7 +15,7 @@ import java.util.Set;
 public class RoleSetDeserializer extends JsonDeserializer<Set<Role>> {
     @Override
     public Set<Role> deserialize(JsonParser jp, DeserializationContext ctxt)
-            throws IOException, JsonProcessingException {
+            throws IOException {
         ObjectMapper mapper = (ObjectMapper) jp.getCodec();
         JsonNode node = mapper.readTree(jp);
         Set<Role> roles = new HashSet<>();

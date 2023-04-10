@@ -26,26 +26,26 @@ public class PeopleController {
 
     @GetMapping(value = "/list")
     @ResponseBody
-    public List<User> getPeople() {
-        return userServiceImpl.allUsers();
+    public ResponseEntity<List<User>> getPeople() {
+        return ResponseEntity.ok(userServiceImpl.allUsers());
     }
 
     @GetMapping(value = "/current")
     @ResponseBody
-    public User getPrincipal(Principal principal) {
+    public ResponseEntity<User> getPrincipal(Principal principal) {
         final String currentUser = principal.getName();
-        return userServiceImpl.findByUsername(currentUser);
+        return ResponseEntity.ok(userServiceImpl.findByUsername(currentUser));
     }
 
     @GetMapping("/roles")
     @ResponseBody
-    public List<Role> getRoles() {
-        return userServiceImpl.findAllRoles();
+    public ResponseEntity<List<Role>> getRoles() {
+        return ResponseEntity.ok(userServiceImpl.findAllRoles());
     }
 
     @PatchMapping(value = "/update")
     @ResponseBody
-    public User update(User updatedUser, @RequestParam("roles") String roles) {
+    public ResponseEntity<User> update(User updatedUser, @RequestParam("roles") String roles) {
         System.out.println("Выполнение update!!!!!fapfaKFJJSGKGLN!!!!!!!!!");
         System.out.println(updatedUser.getEmail() + updatedUser.getId());
         System.out.println(roles);
@@ -54,7 +54,7 @@ public class PeopleController {
         user.setAuthority(userServiceImpl.getRoleById(Long.valueOf(roles)));
         updatedUser.setAuthority(user.getAuthority());
         userServiceImpl.update(user.getId(), updatedUser);
-        return user;
+        return ResponseEntity.ok(user);
     }
 
     @DeleteMapping(value = "/delete")
@@ -66,16 +66,11 @@ public class PeopleController {
 
     @PostMapping(value = "/create")
     @ResponseBody
-    public User addUser(User user, @RequestParam("roles") String role) {
+    public ResponseEntity<User> addUser(User user, @RequestParam("roles") String role) {
         System.out.println(user.getFirst_name());
         user.setAuthority(userServiceImpl.getRoleById(Long.valueOf(role)));
         userServiceImpl.saveUser(user);
-        return user;
+        return ResponseEntity.ok(user);
     }
 
-    @GetMapping("/list/{id}")
-    @ResponseBody
-    public User getPerson(@PathVariable("id") Long id) {
-        return userServiceImpl.findUser(id);
-    }
 }

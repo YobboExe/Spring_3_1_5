@@ -47,8 +47,6 @@ function roleSelection() {
             let keys = Object.keys(roles);
             for (let k in keys) {
                 rolesFromUrl = roles[k];
-                console.log(rolesFromUrl);
-
                 let optEl1 = document.createElement("option");
                 optEl1.innerText = roles[k].name;
                 setAttributes(optEl1, {"value": `${roles[k].id}`, "name": "roles", "type":"number"});
@@ -194,8 +192,6 @@ function modalFill(button, editOrDel) {
                 }
             })
     })
-
-
 }
 
 
@@ -264,8 +260,12 @@ function submitUpdForm(event) {
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4 && xhr.status === 200) {
             let jsonResponse = JSON.parse(xhr.responseText);
-            console.log(jsonResponse)
             updateTr(jsonResponse, event.target[8].value)
+            $('#modalForUser').on('hidden.bs.modal', function () {
+                $(this).find('form').trigger('reset');
+            })
+            $('#modalForUser').modal('hide');
+
         } else {
             console.log(xhr.responseText)
         }
@@ -289,12 +289,12 @@ function submitDelForm(event) {
     return new Promise((resolve, reject) => {
         let data = serializeForm(event.target);
         let userId = event.target[1].value;
-        console.log(event.target[1].value);
         const xhr = new XMLHttpRequest();
         xhr.onreadystatechange = function() {
             if (xhr.readyState === 4 && xhr.status === 204) {
                 console.log("success")
                 deleteTr(userId)
+                $('#modalDeleteForUser').modal('hide');
             } else {
                 console.log(xhr.responseText)
             }
@@ -320,17 +320,26 @@ function submitPostForm(event) {
         data.set('first_name', event.target[0].value)
         data.set('last_name', event.target[1].value)
 
-        console.log(data.get('first_name'));
-        console.log(data.get('last_name'))
-
         const xhr = new XMLHttpRequest();
         xhr.onreadystatechange = function() {
             if (xhr.readyState === 4 && xhr.status === 200) {
                 console.log("success")
                 let json = JSON.parse(xhr.responseText);
-                console.log(json)
                 createTr(json)
-                updateTr(json)
+                // updateTr(json)
+                const homeTab = document.querySelector('#home-tab');
+                const profileTab = document.querySelector('#profile-tab');
+
+                const home = document.getElementById("home");
+
+                const profile = document.getElementById("profile");
+
+                homeTab.classList.add('active');
+                homeTab.ariaSelected = "true";
+                home.classList.add('active', 'show')
+                profileTab.classList.remove('active');
+                profileTab.ariaSelected = "false";
+                profile.classList.remove('active', 'show')
             } else {
             }
         }
